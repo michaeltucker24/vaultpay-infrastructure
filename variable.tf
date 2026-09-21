@@ -8,3 +8,13 @@ variable "public_subnet_cidrs" {
   type        = list(string)
 
 }
+
+variable "app_private_subnet_cidrs" {
+  description = "CIDR block for app private subnet"
+  type        = list(string)
+}
+
+variable "db_private_subnet_cidrs" {
+  description = "CIDR block for db private subnet"
+  type        = list(string)
+}
