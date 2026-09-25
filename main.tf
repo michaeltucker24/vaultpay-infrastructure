@@ -12,3 +12,17 @@ module "vpc" {
   db_private_subnet_cidrs  = var.db_private_subnet_cidrs
 }
 
+module "database" {
+  source = "./modules/database"
+
+  vpc_id                   = module.vpc.vpc_id
+  db_subnet_ids            = module.vpc.db_private_subnet_ids
+  app_private_subnet_cidrs = var.app_private_subnet_cidrs
+  project_name             = var.project_name
+  db_name                  = var.db_name
+  db_username              = var.db_username
+  multi_az                 = var.multi_az
+  backup_retention_period  = var.backup_retention_period
+  deletion_protection      = var.deletion_protection
+  skip_final_snapshot      = var.skip_final_snapshot
+}
