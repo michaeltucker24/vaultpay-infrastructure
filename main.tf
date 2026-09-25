@@ -60,3 +60,40 @@ resource "aws_s3_bucket_public_access_block" "runtime" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+resource "aws_iam_role" "app" {
+  name               = "${var.project_name}-app-role"
+  description        = "IAM role for Vaultpay application"
+  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role.json
+
+  tags = {
+    Name        = "${var.project_name}-app-role"
+    Environment = var.project_name
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "ecr_read" {
+  role       = aws_iam_role.app.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm" {
+  role       = aws_iam_role.app.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy" "app_runtime" {
+  name   = "${var.project_name}-app-runtime"
+  role   = aws_iam_role.app.id
+  policy = data.aws_iam_policy_document.app_runtime.json
+}
+
+resource "aws_iam_instance_profile" "app" {
+  name = "${var.project_name}-app-instance-profile"
+  role = aws_iam_role.app.name
+
+  tags = {
+    Name        = "${var.project_name}-app-instance-profile"
+    Environment = var.project_name
+  }
+}
