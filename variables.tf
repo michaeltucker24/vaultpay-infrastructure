@@ -61,3 +61,15 @@ variable "skip_final_snapshot" {
   description = "Whether to skip the final snapshot when the instance is destroyed."
   type        = bool
 }
+
+variable "ecr_force_delete" {
+  description = "When true the ECR repository will be destroyed even if it has images in it."
+  type        = bool
+  default     = false
+}
+
+variable "s3_force_destroy" {
+  description = "When true the S3 bucket will be destroyed even if it has objects in it."
+  type        = bool
+  default     = false
+}
