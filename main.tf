@@ -37,8 +37,8 @@ resource "aws_ecr_repository" "vaultpay" {
   }
 
   tags = {
-    Name        = "${var.project_name}-ecr"
-    Environment = var.project_name
+    Name    = "${var.project_name}-ecr"
+    Project = var.project_name
   }
 }
 
@@ -47,8 +47,8 @@ resource "aws_s3_bucket" "runtime" {
   force_destroy = var.s3_force_destroy
 
   tags = {
-    Name        = "${var.project_name}-runtime"
-    Environment = var.project_name
+    Name    = "${var.project_name}-runtime"
+    Project = var.project_name
   }
 }
 
@@ -67,8 +67,8 @@ resource "aws_iam_role" "app" {
   assume_role_policy = data.aws_iam_policy_document.ec2_assume_role.json
 
   tags = {
-    Name        = "${var.project_name}-app-role"
-    Environment = var.project_name
+    Name    = "${var.project_name}-app-role"
+    Project = var.project_name
   }
 }
 
@@ -93,7 +93,81 @@ resource "aws_iam_instance_profile" "app" {
   role = aws_iam_role.app.name
 
   tags = {
-    Name        = "${var.project_name}-app-instance-profile"
-    Environment = var.project_name
+    Name    = "${var.project_name}-app-instance-profile"
+    Project = var.project_name
+  }
+}
+
+resource "aws_security_group" "alb" {
+  name        = "${var.project_name}-alb-sg"
+  description = "Allow inbound HTTP traffic from the internet to the vaultpay ALB"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    description = "HTTP from anywhere"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description = "Allow outbound (ALB to targets)"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name    = "${var.project_name}-alb-sg"
+    Project = var.project_name
+  }
+}
+
+resource "aws_lb" "app" {
+  name               = "${var.project_name}-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb.id]
+  subnets            = module.vpc.public_subnet_ids
+
+  tags = {
+    Name    = "${var.project_name}-alb"
+    Project = var.project_name
+  }
+}
+
+resource "aws_lb_target_group" "app" {
+  name        = "${var.project_name}-tg"
+  target_type = "instance"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = module.vpc.vpc_id
+
+  health_check {
+    path                = "/health"
+    protocol            = "HTTP"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 3
+    matcher             = "200"
+  }
+
+  tags = {
+    Name    = "${var.project_name}-tg"
+    Project = var.project_name
+  }
+}
+
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = aws_lb.app.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app.arn
   }
 }

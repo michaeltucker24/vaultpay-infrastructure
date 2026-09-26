@@ -7,3 +7,8 @@ output "runtime_bucket_name" {
   value       = aws_s3_bucket.runtime.bucket
   description = "The name of the S3 bucket for holding vaultpay runtime files."
 }
+
+output "alb_dns_name" {
+  value       = aws_lb.app.dns_name
+  description = "Public DNS name of the Application Load Balancer."
+}
