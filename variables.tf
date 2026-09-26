@@ -73,3 +73,9 @@ variable "s3_force_destroy" {
   type        = bool
   default     = false
 }
+
+variable "image_tag" {
+  description = "The tag of the Vaultpay container image in ECR that the launch template tell instances to pull"
+  type        = string
+  default     = "latest"
+}
