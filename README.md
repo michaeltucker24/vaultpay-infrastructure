@@ -10,10 +10,10 @@ Adjust anything that differs from your actual repo.
 # VaultPay Cloud Infrastructure
 
 Production-style AWS infrastructure for a FinTech transaction platform, built entirely with Terraform.
-<!-- swap this line for your own one-sentence description if your project is different -->
+
 
 ![VaultPay architecture](docs/architecture.png)
-<!-- put your architecture diagram in a docs/ folder as architecture.png, or change the path above -->
+
 
 ## Overview
 
@@ -56,7 +56,7 @@ A customer request comes in through an Application Load Balancer in the public s
     ├── database/              # RDS instance, subnet group, security group
     └── application/           # ALB, launch template, auto scaling group, ECR, IAM role, S3 runtime bucket
 ```
-<!-- adjust this tree to match your actual repo layout -->
+
 
 ## Deploy it
 
@@ -74,12 +74,11 @@ terraform apply -var-file=env_vars/dev.tfvars
 
 ## What I would build next
 
-- HTTPS on the load balancer with an ACM certificate
 - A CI/CD pipeline to deploy on every push
 - Centralized logging and monitoring
 <!-- keep the ones you actually plan to do, or add your own -->
 
 ---
 
-Built by <!-- your name --> as a portfolio project.
-<!-- optional: add a link to your LinkedIn -->
+Built by Michael Tucker as a portfolio project.
+www.linkedin.com/in/michaeltucker24
