@@ -62,20 +62,23 @@ variable "skip_final_snapshot" {
   type        = bool
 }
 
+# ---------------------------------------------------------------------------
+# Application
+# ---------------------------------------------------------------------------
 variable "ecr_force_delete" {
-  description = "When true the ECR repository will be destroyed even if it has images in it."
+  description = "When true, terraform destroy will delete the ECR repository even if it contains images. Production should leave this false; the default guard prevents accidental destruction of rollback image history."
   type        = bool
   default     = false
 }
 
 variable "s3_force_destroy" {
-  description = "When true the S3 bucket will be destroyed even if it has objects in it."
+  description = "When true, terraform destroy will delete the runtime S3 bucket even if it contains objects. Production should leave this false; the default guard prevents accidental data loss."
   type        = bool
   default     = false
 }
 
 variable "image_tag" {
-  description = "The tag of the Vaultpay container image in ECR that the launch template tell instances to pull"
+  description = "Tag of the VaultPay container image in ECR that the launch template tells instances to pull. Defaults to 'latest'; CI/CD pipelines should pin to immutable digests or version tags in production."
   type        = string
   default     = "latest"
 }

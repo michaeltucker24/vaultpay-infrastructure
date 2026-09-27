@@ -1,7 +1,18 @@
 #!/bin/bash
 set -euo pipefail
 
-# Install Docker (Amazon Linux 2023)
+# ----------------------------------------------------------------------------
+# VaultPay application server bootstrap
+#
+# Runs once at first boot. Installs Docker, authenticates to ECR using the
+# instance's IAM role, pulls the VaultPay image, and starts the container.
+#
+# Sensitive values (DB password) are NOT passed in here. The container itself
+# reads the secret from AWS Secrets Manager at startup using boto3 and the
+# instance role -- see the VaultPay app code for the fetch logic.
+# ----------------------------------------------------------------------------
+
+# Install Docker (Amazon Linux 2023 -- package is in the default dnf repo)
 dnf install -y docker
 systemctl enable --now docker
 

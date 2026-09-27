@@ -8,9 +8,9 @@ variable "db_subnet_ids" {
   type        = list(string)
 }
 
-variable "app_private_subnet_cidrs" {
-  description = "CIDR blocks for the app-private subnets. Used for the database security group ingress rule."
-  type        = list(string)
+variable "app_security_group_id" {
+  description = "Security group ID of the application servers. The database security group allows ingress only from this SG."
+  type        = string
 }
 
 variable "project_name" {

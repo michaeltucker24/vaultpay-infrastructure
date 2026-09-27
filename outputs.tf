@@ -1,14 +1,14 @@
 output "ecr_repository_url" {
-  value       = aws_ecr_repository.vaultpay.repository_url
-  description = "The URL of the ECR repository for the holding the vaultpay container image."
+  description = "URL of the ECR repository holding the VaultPay container image. Use this when pushing images manually with docker push."
+  value       = module.application.ecr_repository_url
 }
 
 output "runtime_bucket_name" {
-  value       = aws_s3_bucket.runtime.bucket
-  description = "The name of the S3 bucket for holding vaultpay runtime files."
+  description = "Name of the S3 bucket holding VaultPay runtime data."
+  value       = module.application.runtime_bucket_name
 }
 
 output "alb_dns_name" {
-  value       = aws_lb.app.dns_name
-  description = "Public DNS name of the Application Load Balancer."
+  description = "Public DNS name of the application load balancer."
+  value       = module.application.alb_dns_name
 }

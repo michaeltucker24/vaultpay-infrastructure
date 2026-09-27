@@ -14,10 +14,10 @@ resource "aws_security_group" "rds" {
   vpc_id      = var.vpc_id
 
   ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = var.app_private_subnet_cidrs
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [var.app_security_group_id]
   }
 
   egress {
@@ -47,8 +47,8 @@ resource "aws_db_instance" "vaultpay" {
   manage_master_user_password = true
 
   # Storage
-  storage_type           = "gp3"
-  storage_encrypted      = true
+  storage_type      = "gp3"
+  storage_encrypted = true
 
   # Network & Access
   publicly_accessible    = false
@@ -56,10 +56,10 @@ resource "aws_db_instance" "vaultpay" {
   vpc_security_group_ids = [aws_security_group.rds.id]
 
   # Environment-aware settings: values come from .tfvars files
-  multi_az               = var.multi_az
+  multi_az                = var.multi_az
   backup_retention_period = var.backup_retention_period
-  deletion_protection    = var.deletion_protection
-  skip_final_snapshot    = var.skip_final_snapshot
+  deletion_protection     = var.deletion_protection
+  skip_final_snapshot     = var.skip_final_snapshot
 
   tags = {
     Name    = "vaultpay-db-instance"
