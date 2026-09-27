@@ -80,5 +80,5 @@ terraform apply -var-file=env_vars/dev.tfvars
 
 ---
 
-Built by Michael Tucker as a portfolio project.
-www.linkedin.com/in/michaeltucker24
+- Built by Michael Tucker as a portfolio project.
+- www.linkedin.com/in/michaeltucker24
