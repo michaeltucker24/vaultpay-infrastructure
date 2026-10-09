@@ -67,7 +67,7 @@ terraform apply -var-file=env_vars/dev.tfvars
 
 - A CI/CD pipeline to deploy on every push
 - Centralized logging and monitoring
-<!-- keep the ones you actually plan to do, or add your own -->
+
 
 ---
 
