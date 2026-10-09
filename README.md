@@ -1,12 +1,3 @@
-<!--
-README TEMPLATE for your VaultPay repo.
-It is already filled in for the standard build. To use it:
-  1. Copy this whole file into your repo as README.md
-  2. Replace the spots flagged in the HTML comments with your own details
-  3. Delete those comment lines, then commit and push
-Adjust anything that differs from your actual repo.
--->
-
 # VaultPay Cloud Infrastructure
 
 Production-style AWS infrastructure for a FinTech transaction platform, built entirely with Terraform.
